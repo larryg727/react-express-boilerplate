@@ -7,11 +7,11 @@ npm run dev
 ### Database migrations
 Generate migrations
 ```shell
-typeorm migration:generate -p -n <migration name>
+npm run db:generate <migration name>
 ```
 Run migrations
 ```shell
-typeorm migration:run
+npm run db:upgrade
 ```
 
 ### Version update
