@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express"
 import userRouter from "./user"
+import authRouter from "./auth"
 
 const router = express.Router()
 
@@ -13,5 +14,6 @@ router.get("/version", (req: Request, res: Response) => {
 
 // All Routes in this directory must be imported above then attached to router here
 router.use("/user", userRouter)
+router.use("/auth", authRouter)
 
 export default router
