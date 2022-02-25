@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from "express"
 import { User } from "../entities/User"
-import { handleValidationErrors, HttpException } from "../utils/errorUtils"
+import { HttpException } from "../utils/errorUtils"
 import bcrypt from "bcrypt"
-
-const SALT_ROUNDS = process.env.SALT || 10
+import { createAccessToken, createRefreshToken } from "../utils/authUtils"
 
 export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   // Retrieve login parameters from request
@@ -14,7 +13,6 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
     .where("user.email = :email", { email })
     .getOne()
   // If no user found return login error
-  console.log(user)
   if (!user) {
     // TODO: return error or return as 200 status w/ success false
     next(new HttpException(400, "Username and password combination is not valid. Please try again"))
@@ -22,10 +20,12 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
     // validate password with hash
     const passResults: boolean = await bcrypt.compare(password, user.password)
     if (passResults) {
-      // TODO: create JWT tokens
-      // TODO: create cookie
-      // TODO: return success and tokens
-      return res.json({ success: true })
+      // Create JWT tokens
+      const accessToken: string = createAccessToken(user)
+      const refreshToken: string = createRefreshToken(user)
+      // TODO: create cookie and put refresh token in it
+      // TODO: return success and token
+      return res.json({ success: true, accessToken })
     } else {
       // TODO: return error or return as 200 status w/ success false
       next(new HttpException(400, "Username and password combination is not valid. Please try again"))
