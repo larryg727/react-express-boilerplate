@@ -2,10 +2,11 @@ import { config } from "dotenv"
 config()
 import "reflect-metadata"
 import { createConnection } from "typeorm"
-import express, { Request, Response } from "express"
+import express from "express"
 import apiRouter from "./routes"
 import { errorMiddleware } from "./middleware/errorMiddleware"
 import { authMiddleware } from "./middleware/authMiddleware"
+import cookieParser from "cookie-parser"
 
 const PORT = process.env.PORT || 3000
 
@@ -17,6 +18,8 @@ createConnection()
     // Add parser middleware
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
+    // Add cookie parser middleware
+    app.use(cookieParser())
     // Attach auth middleware
     app.use(authMiddleware)
     // Attach api routes to app

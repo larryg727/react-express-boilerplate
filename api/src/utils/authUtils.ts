@@ -50,3 +50,10 @@ export const validateToken = async (token: string) => {
   })
   return results
 }
+
+export const cookieOptions = {
+  httpOnly: true,
+  sameSite: true,
+  secure: process.env.environment === "production",
+  maxAge: REFRESH_TTL,
+}

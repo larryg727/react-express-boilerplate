@@ -1,5 +1,5 @@
 import express from "express"
-import { loginUser, getMeUser } from "../controllers/auth"
+import { loginUser, getMeUser, refreshTokens, logoutUser } from "../controllers/auth"
 
 const router = express.Router()
 
@@ -11,5 +11,13 @@ router.post("/login", loginUser)
 // @route   GET /api/auth/me
 // @access  Private
 router.get("/me", getMeUser)
+// @desc    Refresh tokens
+// @route   GET /api/auth/refresh
+// @access  Private
+router.get("/refresh", refreshTokens)
+// @desc    Logout user
+// @route   Get /api/auth/logout
+// @access  Private
+router.get("/logout", logoutUser)
 
 export default router
