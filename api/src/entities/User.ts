@@ -24,9 +24,9 @@ export class User extends BaseEntity {
   @IsNotEmpty({ message: "Last name must not be empty" })
   lastName: string
 
-  @CreateDateColumn()
+  @CreateDateColumn({ select: false })
   dateCreated: Date
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ select: false })
   lastUpdated: Date
 }

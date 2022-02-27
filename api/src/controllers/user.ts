@@ -6,13 +6,6 @@ import bcrypt from "bcrypt"
 
 const SALT_ROUNDS = process.env.SALT || 10
 
-export const getUserById = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params
-  const user = await User.findOne(id)
-  if (user) res.json(user)
-  else next(new HttpException(400, "User not found"))
-}
-
 export const postSaveUser = async (req: Request, res: Response, next: NextFunction) => {
   // Retrieve user parameters from request
   const { email, firstName, lastName, password } = req.body

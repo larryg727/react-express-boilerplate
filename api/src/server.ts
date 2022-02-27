@@ -5,6 +5,7 @@ import { createConnection } from "typeorm"
 import express, { Request, Response } from "express"
 import apiRouter from "./routes"
 import { errorMiddleware } from "./middleware/errorMiddleware"
+import { authMiddleware } from "./middleware/authMiddleware"
 
 const PORT = process.env.PORT || 3000
 
@@ -16,6 +17,8 @@ createConnection()
     // Add parser middleware
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
+    // Attach auth middleware
+    app.use(authMiddleware)
     // Attach api routes to app
     app.use("/api", apiRouter)
     // Attach error handler middleware

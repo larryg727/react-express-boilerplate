@@ -1,5 +1,11 @@
 import { Request, Response, NextFunction } from "express"
-import { HttpException, ValidationException } from "../utils/errorUtils"
+import { FieldErrors, HttpException, ValidationException } from "../utils/errorUtils"
+
+interface ErrorBody {
+  status: number
+  message: string
+  fieldErrors?: FieldErrors
+}
 
 export const errorMiddleware = (
   error: HttpException | ValidationException,
@@ -7,7 +13,9 @@ export const errorMiddleware = (
   response: Response,
   next: NextFunction
 ) => {
-  const { status, message } = error
-  const errors = error instanceof ValidationException ? error.errors : []
-  response.status(status).send({ status, message, errors })
+  let errorBody: ErrorBody = { status: error.status, message: error.message }
+  if (error instanceof ValidationException) {
+    errorBody.fieldErrors = error.fieldErrors
+  }
+  response.status(error.status).send(errorBody)
 }

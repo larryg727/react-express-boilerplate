@@ -17,10 +17,10 @@ export interface FieldErrors {
 }
 
 export class ValidationException extends HttpException {
-  errors: FieldErrors
+  fieldErrors: FieldErrors
   constructor(errors: FieldErrors) {
     super(400, "There are errors in your form")
-    this.errors = errors
+    this.fieldErrors = errors
   }
 }
 

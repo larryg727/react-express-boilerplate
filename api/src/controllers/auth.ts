@@ -14,7 +14,7 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
     .getOne()
   // If no user found return login error
   if (!user) {
-    // TODO: return error or return as 200 status w/ success false
+    // TODO: ?-return error or return as 200 status w/ success false
     next(new HttpException(400, "Username and password combination is not valid. Please try again"))
   } else {
     // validate password with hash
@@ -24,15 +24,23 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
       const accessToken: string = createAccessToken(user)
       const refreshToken: string = createRefreshToken(user)
       // TODO: create cookie and put refresh token in it
-      // TODO: return success and token
       return res.json({ success: true, accessToken })
     } else {
-      // TODO: return error or return as 200 status w/ success false
+      // TODO: ?-return error or return as 200 status w/ success false
       next(new HttpException(400, "Username and password combination is not valid. Please try again"))
     }
   }
 }
 
-// me controller to get authenticated user
+export const getMeUser = async (req: Request, res: Response, next: NextFunction) => {
+  // @ts-ignore - user property added my auth middleware
+  const { id, email } = req.user
+  const user = await User.findOne({ id, email })
+  if (user) {
+    res.json(user)
+  } else {
+    next(new HttpException(401, "Unauthorized"))
+  }
+}
 
 // refresh controller to refresh JWT with refresh token
